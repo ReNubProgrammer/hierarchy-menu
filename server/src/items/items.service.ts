@@ -1,6 +1,6 @@
 import { ConflictException, Injectable, NotFoundException } from "@nestjs/common";
 import { CreateItemDto } from "./dto/create-item.dto";
-import { Repository } from "typeorm";
+import { ObjectId, Repository } from "typeorm";
 import { InjectRepository } from '@nestjs/typeorm';
 import { Item } from "./entities/items.entity";
 
@@ -25,7 +25,7 @@ export class ItemsService {
         return this.itemsRepository.find();
     }
 
-    async findItemById(id: string){
+    async findItemById(id: ObjectId){
         const product = await this.itemsRepository.findOne({
             where: {id},
         });
