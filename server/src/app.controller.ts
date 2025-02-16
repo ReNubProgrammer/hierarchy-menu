@@ -1,12 +1,13 @@
-import { Controller, Get } from '@nestjs/common';
+import { Controller, Get, Post, Body } from '@nestjs/common';
+import { CreateItemDto } from './items/dto/create-item.dto';
 import { AppService } from './app.service';
 
 @Controller()
 export class AppController {
   constructor(private readonly appService: AppService) {}
 
-  @Get('api/hello')
+  @Get()
   getHello(): string {
-    return 'Hello from NestJS!';
+    return this.appService.getHello();
   }
 }
