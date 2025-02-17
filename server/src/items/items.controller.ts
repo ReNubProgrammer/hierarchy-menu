@@ -1,9 +1,8 @@
-import { Controller, Get, Post, Body, Param, NotFoundException, ParseUUIDPipe } from '@nestjs/common';
+import { Controller, Get, Post, Body, Param, UsePipes, ValidationPipe, Patch, Delete } from '@nestjs/common';
 import { CreateItemDto } from './dto/create-item.dto';
 import { ItemsService } from './items.service';
-import { ObjectId } from 'typeorm';
-import { ItemChild } from './entities/items-child.entity';
-import { CreateItemChildDto } from './dto/create-item-child.dto';
+import { ItemChild } from './schemas/items-child.schema';
+import { UpdateItemChildtDto, UpdateItemtDto } from './dto/update-item.dto';
 
 @Controller('items')
 export class ItemsController {
@@ -11,37 +10,45 @@ export class ItemsController {
 
   //Create Parent
   @Post('create')
+  @UsePipes(new ValidationPipe())
   async create(@Body() createItemDto: CreateItemDto) {
-    return this.itemsSercive.createItem(createItemDto);
-  }
-
-  //Create Child
-  @Post(':itemId/add-child')
-  async createChild(
-    @Param('itemId') itemId: string,
-    @Body() itemChildData: CreateItemChildDto
-  ) {
-    try {
-      const newChild = await this.itemsSercive.createItemChild(itemId, itemChildData);
-      return newChild;
-    } catch (error) {
-      if (error instanceof NotFoundException) {
-        throw error;
-      } else {
-        throw new NotFoundException(`Error creating new child for product ${itemId}`)
-      }
-    }
-  }
-
-  //Get One
-  @Get('/view/:itemId')
-  async findOne(@Param('itemId') itemId: string) {
-    return this.itemsSercive.findItemById(itemId);
+    return this.itemsSercive.createAnItem(createItemDto);
   }
 
   //Get All
-  @Get('all')
-  async findAll() {
+  @Get()
+  async getAll() {
     return this.itemsSercive.findAllItems();
   }
+
+  //Get One
+  @Get('/:itemId')
+  async getOneById(@Param('itemId') itemId: string) {
+    return this.itemsSercive.findItemById(itemId);
+  }
+
+  //Update Parent
+  @Patch('/update/:itemId')
+  @UsePipes(new ValidationPipe())
+  updateItem(@Body() updateItemDto: UpdateItemtDto, @Param('itemId') itemId: string) {
+    return this.itemsSercive.updateItem(itemId, updateItemDto);
+  }
+
+  //Update Child Name
+  @Patch('/update/:parentId/:childId')
+  @UsePipes(new ValidationPipe())
+  async updateChildName(
+    @Param('parentId') parentId: string,
+    @Param('childId') childId: string,
+    @Body() updateChildNameDto: UpdateItemChildtDto
+  ) {
+    return this.itemsSercive.updateChildName(parentId, childId, updateChildNameDto.name);
+  }
+
+  //Delete Parent
+  @Delete('/remove/:itemId')
+  deleteItem(@Param('itemId') itemId: string) {
+    return this.itemsSercive.deleteItem(itemId);
+  }
+
 }

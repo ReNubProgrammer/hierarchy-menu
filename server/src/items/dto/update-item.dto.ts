@@ -1,17 +1,19 @@
-import { PartialType } from '@nestjs/mapped-types';
+import { Type } from 'class-transformer';
 import { CreateItemDto } from './create-item.dto';
-import { CreateItemChildDto } from './create-item-child.dto';
 import { IsOptional, IsString } from 'class-validator';
-import { IsUnique } from 'src/validation/isunique';
 
-export class UpdateProductDto extends PartialType(CreateItemDto) {
+export class UpdateItemChildtDto{
     @IsOptional()
-    @IsString({message:'Register with the correct typedata'})
-    @IsUnique({
-        table: 'item',
-        column:'name'
-    },{message:'Menu already exist. Try another.'})
+    @IsString()
+    name: string;
+}
+
+export class UpdateItemtDto{
+    @IsOptional()
+    @IsString()
     name: string;
 
-    childs:CreateItemChildDto[];
+    @IsOptional()
+    @Type(() => UpdateItemChildtDto)
+    child: CreateItemDto[];
 }

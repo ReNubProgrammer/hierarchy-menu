@@ -1,10 +1,9 @@
-import { GlobalEntity } from "src/_db/global.entity";
-import { ItemChild } from "./items-child.entity";
+import { ItemChild } from "./items-child.schema";
 import { Prop, Schema, SchemaFactory } from "@nestjs/mongoose";
 import mongoose from "mongoose";
 
 @Schema()
-export class Item extends GlobalEntity<Item>{
+export class Item {
     @Prop({unique: true, required: true})
     name: string;
 
