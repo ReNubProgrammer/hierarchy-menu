@@ -1,8 +1,8 @@
-import { PrimaryGeneratedColumn, ObjectId, ObjectIdColumn } from "typeorm";
+import { ObjectId, ObjectIdColumn} from "typeorm";
 
 export class GlobalEntity<GE>{
     @ObjectIdColumn()
-    id: ObjectId;
+    _id: ObjectId;
 
     constructor(entity: Partial<GE>){
         Object.assign(this, entity);

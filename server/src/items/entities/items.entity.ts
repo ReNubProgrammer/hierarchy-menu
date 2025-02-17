@@ -1,12 +1,15 @@
 import { GlobalEntity } from "src/_db/global.entity";
-import { Column, Entity, OneToMany } from "typeorm";
 import { ItemChild } from "./items-child.entity";
+import { Prop, Schema, SchemaFactory } from "@nestjs/mongoose";
+import mongoose from "mongoose";
 
-@Entity()
+@Schema()
 export class Item extends GlobalEntity<Item>{
-    @Column()
+    @Prop({unique: true, required: true})
     name: string;
 
-    @OneToMany(()=>Item, item=>item.name, {cascade:true, onDelete:'CASCADE'})
+    @Prop({type: mongoose.Schema.Types.ObjectId, ref: 'ItemChild'})
     child: ItemChild[];
 }
+
+export const ItemSchema = SchemaFactory.createForClass(Item);

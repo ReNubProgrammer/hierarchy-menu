@@ -11,7 +11,7 @@ export class UpdateProductDto extends PartialType(CreateItemDto) {
         table: 'item',
         column:'name'
     },{message:'Menu already exist. Try another.'})
-    productName: string;
+    name: string;
 
     childs:CreateItemChildDto[];
 }

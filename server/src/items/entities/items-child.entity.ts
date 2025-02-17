@@ -3,10 +3,7 @@ import { Item } from "./items.entity";
 import { GlobalEntity } from "src/_db/global.entity";
 
 @Entity()
-export class ItemChild extends GlobalEntity<Item>{
+export class ItemChild extends GlobalEntity {
     @Column()
     name: string;
-
-    @ManyToOne(() => Item, items => items.child, {onDelete:'CASCADE'})
-    parents: Item;
 }
